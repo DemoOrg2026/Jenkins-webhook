@@ -1,21 +1,25 @@
-node("master")
+def workspace
+node
 {
-  // Globals
-  def branch = env.BRANCH_NAME    // Branch of code to build
-  def buildUrl = env.BUILD_URL    // Build url for jenkins
-  
-
-  /***************************************************************************************************
-  ****************************************************************************************************
-  * Get Payload Stage
-  ****************************************************************************************************
-  ***************************************************************************************************/
-  stage("Get-Payload")
-  {
-    sh "echo '#########################################'"
-    sh "echo 'Get the payload'"
-    sh "echo '#########################################'"
-    echo 'The action is :' + action
-    echo 'The pr number is :' + pr_number
-  }
+    stage('checkout')
+    {
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/sandesh2026/feereport.git']]])
+        workspace = pwd()
+    }
+    stage('static code analysis')
+    {
+        echo 'Code analysis stage'
+    }
+    stage('Build')
+    {
+        echo 'Building stage'
+    }
+    stage('Unit testing')
+    {
+        echo 'Unit testing'
+    }
+    stage('Delivery')
+    {
+        echo 'Delivery stage'
+    }
 }
